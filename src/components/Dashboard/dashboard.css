@@ -1,0 +1,16 @@
+.background_dashboard{
+  background: #e8eaf6;
+  min-height: 100vh;
+}
+.text_title_dashboard{
+  color: rgb(1, 54, 136);
+}
+.thead_color_dashboard{
+  background: rgb(1, 54, 136);
+  color: white;
+}
+
+.tbody{
+  overflow-y: auto;
+  height: 350px;
+}
