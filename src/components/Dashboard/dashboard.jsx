@@ -280,11 +280,11 @@ class Dashboard extends Component {
               let service = { time: new Date().toLocaleTimeString('es-MX'),
                 shop: "Tienda Estrella",
                 address: "Tejocote 23, Bosques de ixtacala 52919, Atizapan de Zaragoza, Edo. México" }
-              let param = data.newMessageAdded.data
+              let param = data.newMessageAdded.device
               let time = data.newMessageAdded.timestamp
               if (time !== this.state.lastTime) {
                 switch(param !== null) {
-                  case param === "boton_01" :
+                  case param === "440987" :
                     this.state.serviceBimbo.push(service)
                     this.setState({
                       imgBimbo: "/images/Logo_Bimbo.png",
@@ -293,7 +293,7 @@ class Dashboard extends Component {
                     });
                   break;
                   
-                  case param === "boton_02" :
+                  case param === "4428CF" :
                     this.state.serviceMarinela.push(service)
                     this.setState({
                       imgMarinela: "/images/Logo_Marinela.png",
@@ -302,7 +302,7 @@ class Dashboard extends Component {
                     });
                   break;
   
-                  case param === "boton_03" :
+                  case param === "44075D" :
                     this.state.serviceBarcel.push(service)
                     this.setState({
                       imgBarcel: "/images/Logo_Barcel.png",
@@ -311,7 +311,7 @@ class Dashboard extends Component {
                     });
                   break;
   
-                  case param === "boton_04" :
+                  case param === "4428A9" :
                     this.state.serviceTiaRosa.push(service)
                     this.setState({
                       imgTiaRosa: "/images/Logo_TiaRosa.png",
@@ -320,7 +320,7 @@ class Dashboard extends Component {
                     });
                   break;
 
-                  case param === "boton_05" :
+                  case param === "440B10" :
                     this.setState({
                       imgBimbo: "/images/Logo_Bimbo_Gris.png",
                       imgMarinela: "/images/Logo_Marinela_Gris.png",
