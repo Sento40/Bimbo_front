@@ -10,7 +10,7 @@
   color: white;
 }
 
-.tbody{
+.table_scrollable_dashboard{
   overflow-y: auto;
   height: 350px;
 }

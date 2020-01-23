@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import {Subscription} from 'react-apollo';
 import './dashboard.css'
+
+const NEW_TEMPS_ADDED = gql`
+subscription{
+  newMessageAdded{
+    device
+    timestamp
+    data
+  }
+}
+`;
 
 class Dashboard extends Component {
   constructor(props) {
@@ -17,7 +29,9 @@ class Dashboard extends Component {
       serviceBimbo: [],
       serviceMarinela: [],
       serviceBarcel: [],
-      serviceTiaRosa: []
+      serviceTiaRosa: [],
+      lastTime: "",
+      pedidos:0
     }
   }
 
@@ -167,12 +181,12 @@ class Dashboard extends Component {
           <div className="row justify-content-center text-center">
             <h1 className="text_title_dashboard mt-5">{this.state.date}</h1>
           </div>
-          <div className="row justify-content-center text-center">
+          {/* <div className="row justify-content-center text-center">
             <div className="col-md-3"><button className="btn btn-success" onClick={(e) => this.changeImg(e, 1)}>Change!</button></div>
             <div className="col-md-3"><button className="btn btn-success" onClick={(e) => this.changeImg(e, 2)}>Change!</button></div>
             <div className="col-md-3"><button className="btn btn-success" onClick={(e) => this.changeImg(e, 3)}>Change!</button></div>
             <div className="col-md-3"><button className="btn btn-success" onClick={(e) => this.changeImg(e, 4)}>Change!</button></div>
-          </div>
+          </div> */}
           <div className="row justify-content-center mt-5 text-center">
             <div className="col-md-3"><img src={this.state.alertBimbo} className="mt-5" width="50" alt=""/><br/></div>
             <div className="col-md-3"><img src={this.state.alertMarinela} className="mt-5" width="50" alt=""/><br/></div>
@@ -194,7 +208,7 @@ class Dashboard extends Component {
             </div>
           </div>
           <div className="row justify-content-center mt-5 text-center">
-            <div className="col-md-3 tbody table-responsive">
+            <div className="col-md-3 table_scrollable_dashboard table-responsive">
               <table className="table table-striped">
                 <thead className="thead_color_dashboard">
                   <tr>
@@ -208,7 +222,7 @@ class Dashboard extends Component {
                 </tbody>
               </table>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-3 table_scrollable_dashboard table-responsive">
               <table className="table table-striped">
                 <thead className="thead_color_dashboard">
                   <tr>
@@ -222,7 +236,7 @@ class Dashboard extends Component {
                 </tbody>
               </table>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-3 table_scrollable_dashboard table-responsive">
               <table className="table table-striped">
                 <thead className="thead_color_dashboard">
                   <tr>
@@ -236,7 +250,7 @@ class Dashboard extends Component {
                 </tbody>
               </table>
             </div>
-            <div className="col-md-3">
+            <div className="col-md-3 table_scrollable_dashboard table-responsive">
               <table className="table table-striped">
                 <thead className="thead_color_dashboard">
                   <tr>
@@ -252,6 +266,84 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
+        <Subscription 
+          subscription={NEW_TEMPS_ADDED}
+        >
+          {
+            ({data, loading}) => {
+              if(loading) return <React.Fragment></React.Fragment>
+              let alert = "/images/icon-alert.gif"
+              let service = { time: new Date().toLocaleTimeString('es-MX'), shop: "Tienda Estrella", address: "Tejocote 23, Bosques de ixtacala 52919, Atizapan de Zaragoza, Edo. México" }
+              let param = data.newMessageAdded.data
+              let time = data.newMessageAdded.timestamp
+              console.log(`time ${time}`, `last ${this.state.lastTime}`);
+              if (time !== this.state.lastTime) {
+                switch(param !== null) {
+                  case param === "boton_01" :
+                    this.state.serviceBimbo.push(service)
+                    this.setState({
+                      imgBimbo: "/images/Logo_Bimbo.png",
+                      alertBimbo: alert,
+                      lastTime: time
+                    });
+                  break;
+                  
+                  case param === "boton_02" :
+                    this.state.serviceMarinela.push(service)
+                    this.setState({
+                      imgMarinela: "/images/Logo_Marinela.png",
+                      alertMarinela: alert,
+                      lastTime: time
+                    });
+                  break;
+  
+                  case param === "boton_03" :
+                    this.state.serviceBarcel.push(service)
+                    this.setState({
+                      imgBarcel: "/images/Logo_Barcel.png",
+                      alertBarcel: alert,
+                      lastTime: time
+                    });
+                  break;
+  
+                  case param === "boton_04" :
+                    this.state.serviceTiaRosa.push(service)
+                    this.setState({
+                      imgTiaRosa: "/images/Logo_TiaRosa.png",
+                      alertTiaRosa: alert,
+                      lastTime: time
+                    });
+                  break;
+
+                  case param === "boton_05" :
+                    this.setState({
+                      imgBimbo: "/images/Logo_Bimbo_Gris.png",
+                      imgMarinela: "/images/Logo_Marinela_Gris.png",
+                      imgBarcel: "/images/Logo_Barcel_Gris.png",
+                      imgTiaRosa: "/images/Logo_TiaRosa_Gris.png",
+                      alertBimbo: "",
+                      alertMarinela: "",
+                      alertBarcel: "",
+                      alertTiaRosa: "",
+                      serviceBimbo: [],
+                      serviceMarinela: [],
+                      serviceBarcel: [],
+                      serviceTiaRosa: [],
+                      lastTime: time,
+                      pedidos: this.state.pedidos + 1
+                    });
+                  break;
+  
+                  default :
+                    console.log(param);
+                    alert = ""
+                  break;
+                }
+              }
+              return <React.Fragment></React.Fragment>
+            }
+          }
+        </Subscription>
       </React.Fragment>
      );
   }
