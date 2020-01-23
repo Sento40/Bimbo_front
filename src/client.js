@@ -12,7 +12,7 @@ const httpLink = createHttpLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://back-bimbo.herokuapp.com/graphql`,
+  uri: `wss://back-bimbo.herokuapp.com/graphql`,
   options: {
     reconnect: true,
   },
